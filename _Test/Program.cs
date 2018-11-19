@@ -1,15 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace _Test
 {
-    class Program
+    internal class Program
     {
-        static void Main (string[] args)
+        private static void Main (string[] args)
         {
+            //Test7_Dome test7_ = new Test7_Dome();
+            Test8_Dome test8_ = new Test8_Dome();
+
+            //test7_.WriteFile();
+            //test7_.ReadFile();
+            test8_.WriteJsonFile();
+            test8_.ReadJsonFile();
+
+            Console.ReadKey();
         }
     }
 }
