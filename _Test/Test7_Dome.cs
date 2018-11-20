@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
@@ -23,32 +24,43 @@ namespace _Test
         {
             fileHelper.OpenFile(out FileStream fs);
 
-            if (fs.Length > 1) return;
-
             using (fs)
             {
-                using (MemoryStream ms = new MemoryStream())
+                using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
                 {
-                    bf.Serialize(ms, playerDatas);
-                    using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
-                    {
-                        var buffer =  ms.ToArray();
-                        sw.BaseStream.Write(buffer, 0, buffer.Length);
-                    }
+                    bf.Serialize(sw.BaseStream, playerDatas);
                 }
+
+                //using (MemoryStream ms = new MemoryStream())
+                //{
+                //    
+                //    using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
+                //    {
+                //        var buffer =  ms.ToArray();
+                //        sw.BaseStream.Write(buffer, 0, buffer.Length);
+                //    }
+                //}
             }
         }
 
         public PlayerData[] ReadFile ()
         {
             fileHelper.OpenFile(out FileStream fs);
-            PlayerData[] value;
+            PlayerData[] value = null;
 
             using (fs)
             {
                 using (BinaryReader br = new BinaryReader(fs, Encoding.UTF8))
                 {
-                    value = bf.Deserialize(fs) as PlayerData[];
+                    try
+                    {
+                        value = bf.Deserialize(fs) as PlayerData[];
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    
                 }
             }
 

@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Xml;
 using System.Collections.Generic;
 
 namespace _Test
 {
     [Serializable]
-    internal class PlayerData
+    public class PlayerData
     {
         public int PlayerId;
         public int Level;
