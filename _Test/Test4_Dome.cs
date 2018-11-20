@@ -50,5 +50,70 @@ namespace _Test
                 playerDataDic.Add(playerData.PlayerId, playerData);
             }
         }
+        
+
+        private void RemoveItem(Func<PlayerData, bool> func)
+        {
+            for (int i = 1; i < playerDataList.Count; i++)
+            {
+                if (func(playerDataList[i]))
+                {
+                    playerDataList.RemoveAt(i);
+                }
+            }
+        }
+
+        public void RemoveDicItem(Func<PlayerData, bool> func)
+        {
+            var list = new List<int>();
+
+            var enumer = playerDataDic.GetEnumerator();
+
+            while (enumer.MoveNext())
+            {
+                if (func(enumer.Current.Value))
+                {
+                    playerDataDic.Remove(enumer.Current.Key);
+                }
+            }
+        }
+
+
+        class compares : IComparer<PlayerData>
+        {
+            public int Compare(PlayerData x, PlayerData y)
+            {
+                if (x.Level < y.Level)
+                    return 0;
+                else if(x.Level > y.Level)
+                    return -1;
+                else
+                {
+                    if (x.PlayerId > y.PlayerId)
+                        return 1;
+                    else
+                        return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 对 playerData排序
+        /// </summary>
+        public void SortPlayerData()
+        {
+            compares comp = new compares();
+
+            playerDataList.Sort(comp);
+        }
+
+        /// <summary>
+        /// 删除对应条件数据
+        /// </summary>
+        public void RemovePlayerData()
+        {
+            //删除 Level < 2 的数据 和 dic 的数据
+            RemoveItem(item => item.Level <= 3);
+        }
     }
 }

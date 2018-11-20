@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
@@ -74,16 +76,46 @@ namespace _Test
 
         public void WriteXmlFile()
         {
+            XDocument xDoc = new XDocument
+            (
+                new XElement
+                (
+                    "ArrayOfPlayerData",
+                    from p in playerDatas
+                    select new XElement
+                    (
+                        "PlayerData",
+                        new XElement("PlayerId", p.PlayerId),
+                        new XElement("Level", p.Level),
+                        new XElement("PlayerName", p.PlayerName)
+                    )
+                )
+                    
+            );
+
+            Console.WriteLine(xDoc);
+
             xmlFile.OpenFile(out FileStream fs);
 
             using (fs)
             {
                 using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
                 {
-                    var xs = new XmlSerializer(typeof(PlayerData[]));
-                    xs.Serialize(sw, playerDatas);
+                    xDoc.Save(sw);
                 }
             }
+
+
+            //xmlFile.OpenFile(out FileStream fs);
+
+            //using (fs)
+            //{
+            //    using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
+            //    {
+            //        var xs = new XmlSerializer(typeof(PlayerData[]));
+            //        xs.Serialize(sw, playerDatas);
+            //    }
+            //}
         }
 
         public PlayerData[] ReadXmlFile()
@@ -95,8 +127,6 @@ namespace _Test
             {
                 using(StreamReader sr = new StreamReader(fs, Encoding.UTF8))
                 {
-                    if (fs.Length < 1) return value;
-
                     var xs = new XmlSerializer(typeof(PlayerData[]));
                     value = xs.Deserialize(fs) as PlayerData[];
                 }
@@ -106,3 +136,4 @@ namespace _Test
         }
     }
 }
+
