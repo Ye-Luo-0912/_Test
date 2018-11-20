@@ -16,7 +16,7 @@ namespace _Test
     {
         internal PlayerData[] GetPlayerData => playerDataList.ToArray();
 
-        private static Test4_Dome iset;
+        private static readonly Test4_Dome iset;
 
         private static List<PlayerData> playerDataList;
         private static Dictionary<int, PlayerData> playerDataDic;

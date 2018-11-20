@@ -102,7 +102,7 @@ namespace _Test
             (
                 new XElement
                 (
-                    "ArrayOfPlayerData",
+                    "{http://www.w3.org/2000/xmlns/}ArrayOfPlayerData",
                     from p in playerDatas
                     select new XElement
                     (
