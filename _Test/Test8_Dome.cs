@@ -28,13 +28,35 @@ namespace _Test
         /// </summary>
         public void WriteJsonFile ()
         {
+            //jsonFile.OpenFile(out FileStream fs);
+
+            //using (fs)
+            //{
+            //    var jsonData = JsonConvert.SerializeObject(playerDatas);
+            //    var buffer = Encoding.UTF8.GetBytes(jsonData);
+
+            //    try
+            //    {
+            //        fs.Write(buffer, 0, buffer.Length);
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Console.WriteLine(e.Message);
+            //    }
+            //}
+
+            var jsnData = (from p in playerDatas
+                         select $"{{\"PlayerId\":{p.PlayerId}, \"Level\":{p.Level},\"PlayerName\":\"{p.PlayerName}\"}}").ToArray();
+
+            var jsonStr = $"[{ string.Join(",", jsnData) }]";
+
+            Console.WriteLine(jsonStr);
+
             jsonFile.OpenFile(out FileStream fs);
 
             using (fs)
             {
-                var jsonData = JsonConvert.SerializeObject(playerDatas);
-                var buffer = Encoding.UTF8.GetBytes(jsonData);
-
+                var buffer = Encoding.UTF8.GetBytes(jsonStr.ToString());
                 try
                 {
                     fs.Write(buffer, 0, buffer.Length);
@@ -90,7 +112,6 @@ namespace _Test
                         new XElement("PlayerName", p.PlayerName)
                     )
                 )
-                    
             );
 
             Console.WriteLine(xDoc);
@@ -128,7 +149,15 @@ namespace _Test
                 using(StreamReader sr = new StreamReader(fs, Encoding.UTF8))
                 {
                     var xs = new XmlSerializer(typeof(PlayerData[]));
-                    value = xs.Deserialize(fs) as PlayerData[];
+                    try
+                    {
+                        value = xs.Deserialize(fs) as PlayerData[];
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    
                 }
             }
 

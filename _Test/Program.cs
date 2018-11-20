@@ -13,10 +13,10 @@ namespace _Test
 
             //test7_.WriteFile();
             //test7_.ReadFile();
-            //test8_.WriteJsonFile();
-            //test8_.ReadJsonFile();
-            test8_.WriteXmlFile();
-            test8_.ReadXmlFile();
+            test8_.WriteJsonFile();
+            test8_.ReadJsonFile();
+            //test8_.WriteXmlFile();
+            //test8_.ReadXmlFile();
 
             Console.ReadKey();
         }
