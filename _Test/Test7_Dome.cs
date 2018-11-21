@@ -26,9 +26,14 @@ namespace _Test
 
             using (fs)
             {
-                using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
+                using (BinaryWriter bw = new BinaryWriter(fs,Encoding.UTF8))
                 {
-                    bf.Serialize(sw.BaseStream, playerDatas);
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        bf.Serialize(ms, playerDatas);
+                        var buffer = ;
+                        bw.Write(ms.ToArray());
+                    }
                 }
 
                 //using (MemoryStream ms = new MemoryStream())
@@ -50,18 +55,23 @@ namespace _Test
 
             using (fs)
             {
-                using (BinaryReader br = new BinaryReader(fs, Encoding.UTF8))
+                try
                 {
-                    try
+                    using (BinaryReader br = new BinaryReader(fs, Encoding.UTF8))
                     {
-                        value = bf.Deserialize(fs) as PlayerData[];
+                        var buffer = new byte[fs.Length];
+                        br.Read(buffer, 0, buffer.Length);
+                        using (MemoryStream ms = new MemoryStream(buffer))
+                        {
+                            value = bf.Deserialize(ms) as PlayerData[];
+                        }
                     }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e.Message);
-                    }
-                    
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                
             }
 
             return value;
