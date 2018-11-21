@@ -31,7 +31,6 @@ namespace _Test
                     using (MemoryStream ms = new MemoryStream())
                     {
                         bf.Serialize(ms, playerDatas);
-                        var buffer = ;
                         bw.Write(ms.ToArray());
                     }
                 }
