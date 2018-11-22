@@ -34,16 +34,7 @@ namespace _Test
                         bw.Write(ms.ToArray());
                     }
                 }
-
-                //using (MemoryStream ms = new MemoryStream())
-                //{
-                //    
-                //    using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
-                //    {
-                //        var buffer =  ms.ToArray();
-                //        sw.BaseStream.Write(buffer, 0, buffer.Length);
-                //    }
-                //}
+                
             }
         }
 

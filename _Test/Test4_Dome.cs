@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml;
 using System.Collections.Generic;
+using System.Web.Razor.Parser.SyntaxTree;
 
 namespace _Test
 {
@@ -54,26 +55,38 @@ namespace _Test
 
         private void RemoveItem(Func<PlayerData, bool> func)
         {
-            for (int i = 1; i < playerDataList.Count; i++)
+            Span<PlayerData> datas = playerDataList.ToArray();
+            if (datas.IsEmpty) return;
+
+            List<int> rList = new List<int>();
+            for (int i = 1; i < datas.Length; i++)
             {
                 if (func(playerDataList[i]))
                 {
-                    playerDataList.RemoveAt(i);
+                    rList.Add(i);
                 }
+            }
+
+            Span<int> li = rList.ToArray();
+            for (int i = 0; i < li.Length; i++)
+            {
+                playerDataList.RemoveAt(li[i]);
             }
         }
 
         public void RemoveDicItem(Func<PlayerData, bool> func)
         {
             var list = new List<int>();
+            int[] ks = null;
 
-            var enumer = playerDataDic.GetEnumerator();
+            playerDataDic.Keys.CopyTo(ks, 0);
+            Span<int> keys = ks;
 
-            while (enumer.MoveNext())
+            for (int i = 0; i < keys.Length; i++)
             {
-                if (func(enumer.Current.Value))
+                if (func(playerDataDic[keys[i]]))
                 {
-                    playerDataDic.Remove(enumer.Current.Key);
+                    playerDataDic.Remove(keys[i]);
                 }
             }
         }
